@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 Henning Norén
+ * Copyright (C) 2006-2022 Henning Norén
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
-//#include <sys/types.h>
-//#include <sys/stat.h>
 
 #define _FILE_OFFSET_BITS 64
 
@@ -41,7 +39,7 @@ main(int argc, char **argv) {
     exit(2); 
   }
   //  int ch;
-  e = calloc(1,sizeof(EncData));
+  e = checked_calloc(1,sizeof(EncData));
 
   if(!openPDF(file,e)) {
     fprintf(stderr, "Error: Not a valid PDF\n");

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 Henning Norén
+ * Copyright (C) 2006-2022 Henning Norén
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@
 #define PRINTERVAL 20 /** Print Progress Interval (seconds) */
 #define CRASHFILE "savedstate.sav"
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 19
+#define VERSION_MINOR 20
 
 #define _FILE_OFFSET_BITS 64
 
@@ -96,6 +96,7 @@ main(int argc, char** argv) {
   /** Parse arguments */
   while(true) {
     int c, option_index;
+    char *endptr;
     static struct option long_options[] = {
       {"bench",    no_argument      , 0, 'b'},
       {"charset",  required_argument, 0, 'c'},
@@ -147,11 +148,25 @@ main(int argc, char** argv) {
       break;
 	
     case 'm':
-      maxpw = atoi(optarg);
+      if(optarg[0] == '=')
+	optarg++;
+      maxpw = (int)strtol(optarg,&endptr, 10);
+      if (*endptr != '\0' || endptr == optarg) {
+	printHelp(argv[0]);
+	ret = 1;
+	goto out2;
+      }
       break;
      
     case 'n':
-      minpw = atoi(optarg);
+      if(optarg[0] == '=')
+	optarg++;
+      minpw = (int)strtol(optarg,&endptr, 10);
+      if (*endptr != '\0' || endptr == optarg) {
+	printHelp(argv[0]);
+	ret = 1;
+	goto out2;
+      }
       break;
 
     case 'o':
@@ -231,7 +246,7 @@ main(int argc, char** argv) {
     goto out2;
   }
 
-  e = calloc(1,sizeof(EncData));
+  e = checked_calloc(1,sizeof(EncData));
 
   if(recovery) {
     if(wordlistfile) {

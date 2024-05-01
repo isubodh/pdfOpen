@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 Henning Norén
+ * Copyright (C) 2006-2022 Henning Norén
  * Copyright (C) 1996-2005 Glyph & Cog, LLC.
  * 
  * This program is free software; you can redistribute it and/or
@@ -112,7 +112,7 @@ initEncKeyWorkSpace(const int revision, const bool encMetaData,
    *  [extra padding]  | [4] (Special for step 6)
    **/
   size = (revision >= 3 && !encMetaData) ? 72 : 68;
-  encKeyWorkSpace = malloc(size + fileIDLen);
+  encKeyWorkSpace = checked_malloc(size + fileIDLen);
 
   /** Just to be sure we have no uninitalized stuff in the workspace */
   memcpy(encKeyWorkSpace, pad, 32);
@@ -661,10 +661,10 @@ initPDFCrack(const EncData *e, const uint8_t *upw, const bool user,
     }
   }
   else if(e->revision >= 3) {
-    buf = malloc(32+sizeof(uint8_t)*e->fileIDLen);
+    buf = checked_malloc(32+sizeof(uint8_t)*e->fileIDLen);
     memcpy(buf, pad, 32);
     memcpy(buf + 32, e->fileID, e->fileIDLen);
-    tmp = malloc(sizeof(uint8_t)*16);
+    tmp = checked_malloc(sizeof(uint8_t)*16);
     md5(buf, 32+e->fileIDLen, tmp);
     free(buf);
     rev3TestKey = tmp;
@@ -725,7 +725,7 @@ loadState(FILE *file, EncData *e, char **wl, bool *user) {
   e->encryptMetaData = (tmp == true);
 
   /** Load the FileID */
-  e->fileID = malloc(sizeof(uint8_t)*e->fileIDLen);
+  e->fileID = checked_malloc(sizeof(uint8_t)*e->fileIDLen);
   for(i=0;i<e->fileIDLen;i++) {
     if(fscanf(file, " %d", &tmp) < 1)
       return false;
@@ -740,7 +740,7 @@ loadState(FILE *file, EncData *e, char **wl, bool *user) {
   if(len > 256 || len <= 0)
     return false;
 
-  e->s_handler = malloc((sizeof(uint8_t)*len)+1);
+  e->s_handler = checked_malloc((sizeof(uint8_t)*len)+1);
 
   for(i=0;i<(unsigned int)len;i++) {
     e->s_handler[i] = getc(file);
@@ -752,7 +752,7 @@ loadState(FILE *file, EncData *e, char **wl, bool *user) {
   /** Currently we only handle Standard, so probably corrupt otherwise */
   if(strcmp(e->s_handler,"Standard") != 0)
      return false;
-  
+
   /** Load the U- and O-strings */
   if(fscanf(file, "\nO:") == EOF)
     return false;
@@ -760,8 +760,8 @@ loadState(FILE *file, EncData *e, char **wl, bool *user) {
     len = 48;
   else
     len = 32;
-  e->o_string = malloc(sizeof(uint8_t)*len);
-  e->u_string = malloc(sizeof(uint8_t)*len);
+  e->o_string = checked_malloc(sizeof(uint8_t)*len);
+  e->u_string = checked_malloc(sizeof(uint8_t)*len);
 
   for(i=0;i<len;i++) {
     if(fscanf(file, " %d", &tmp) < 1)
@@ -775,7 +775,7 @@ loadState(FILE *file, EncData *e, char **wl, bool *user) {
       return false;
     e->u_string[i] = tmp;
   }
- 
+
   /** Load the simple values bound to the state */
   if(fscanf(file, string_UUPWP, &tmp, &tmp2, &tmp3) < 3)
     return false;

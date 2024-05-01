@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Henning Norén
+ * Copyright (C) 2014-2022 Henning Norén
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 
 #include <stdint.h>
 
-void sha256(const uint8_t *msg, const int msgLen, uint8_t *hash);
-void sha256f(const uint8_t *msg, const int msgLen, uint8_t *hash);
+void sha256(const uint8_t *msg, const unsigned int msgLen, uint8_t *hash);
+void sha256f(const uint8_t *msg, const unsigned int msgLen, uint8_t *hash);
 
 #endif /** _SHA256_H_ */

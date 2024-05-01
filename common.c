@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 Henning Norén
+ * Copyright (C) 2006-2022 Henning Norén
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "common.h"
+
+void*
+checked_malloc(size_t size) {
+  void *ret = malloc(size);
+  if(ret == NULL) {
+    fprintf(stderr, "Out of memory");
+    exit(69);
+  }
+  return ret;
+}
+
+void*
+checked_calloc(size_t nmemb, size_t size) {
+  void *ret = calloc(nmemb, size);
+  if(ret == NULL) {
+    fprintf(stderr, "Out of memory");
+    exit(69);
+  }
+  return ret;
+}
 
 void
 freeEncData(EncData *e) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2017 Henning Norén
+ * Copyright (C) 2006-2022 Henning Norén
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@ stdchars[] = {"abcdefghijklmnopqrstuvwxyz"
 	      "0123456789"};
 
 static const uint8_t *charset;
-static unsigned int charsetLen;
+static int charsetLen;
 static unsigned int maxPasswordLen;
 static int password[PASSLENGTH];
 
@@ -112,7 +112,7 @@ genNextPassword() {
       the next one and return true unless we have reached the last position we
       want to try.
   */
-  while(++password[i] == (int)charsetLen)
+  while(++password[i] == charsetLen)
     password[i++] = 0;
  
   return (i != maxPasswordLen);
@@ -187,8 +187,7 @@ static const char string_MPCLC[] = "MaxPWL: %d\nCharset(%d): ";
 
 bool
 pw_loadState(FILE *file, char **wl) {
-  int pm;
-  unsigned int i, len;
+  int pm, i, len;
   char * __restrict string;
 
   if(fscanf(file, string_PM, &pm) < 1)
@@ -201,7 +200,7 @@ pw_loadState(FILE *file, char **wl) {
     if(charsetLen > 256 || charsetLen < 1)
       return false;
 
-    string = malloc(sizeof(uint8_t)*charsetLen+1);
+    string = checked_malloc((sizeof(uint8_t)*(size_t)charsetLen+1));
     for(i=0;i<charsetLen;i++)
       string[i] = getc(file);
     string[i] = '\0';
@@ -227,7 +226,7 @@ pw_loadState(FILE *file, char **wl) {
     if(len < 1 || len > 32767)
       return false;
     
-    string = malloc(sizeof(char)*len+1);
+    string = checked_malloc(sizeof(char)*(size_t)len+1);
     for(i=0;i<len;i++) {
       string[i] = getc(file);
     }
@@ -247,7 +246,7 @@ pw_loadState(FILE *file, char **wl) {
     return false;
   }
 
-  pwMethod = pm;
+  pwMethod = (passwordMethod)pm;
   recovery = true;
 
   return true;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 Henning Norén
+ * Copyright (C) 2006-2022 Henning Norén
  * Copyright (C) 1996-2005 Glyph & Cog, LLC.
  * 
  * This program is free software; you can redistribute it and/or
@@ -62,7 +62,7 @@ md5(const uint8_t *msg, const unsigned int msgLen, uint8_t *digest) {
   
   /** compute number of 64-byte blocks
       (length + pad byte (0x80) + 8 bytes for length) */
-  n64 = (msgLen + 72) / 64;
+  n64 = ((int)msgLen + 72) / 64;
   
   /** initialize a, b, c, d */
   a = AA;

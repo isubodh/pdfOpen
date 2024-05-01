@@ -204,7 +204,7 @@ rc4DecryptArb(const uint8_t *key, const uint8_t *bs,
   j = 0;
   i = -1;
   do {
-    key_pass( (i % keyLen) );
+    key_pass( ((unsigned int)i % keyLen) );
   } while(i < 255);
 
   j = 0;

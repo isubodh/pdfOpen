@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-2015 Henning Norén
+ * Copyright (C) 2014-2022 Henning Norén
  * Copyright (C) 1996-2011 Glyph & Cog, LLC
  * 
  * This program is free software; you can redistribute it and/or
@@ -141,10 +141,10 @@ static void sha256HashBlock(const uint8_t *blk, uint32_t *hash) {
   hash[7] += H;
 }
 
-void sha256(const uint8_t *msg, const int msgLen, uint8_t *hash) {
+void sha256(const uint8_t *msg, const unsigned int msgLen, uint8_t *hash) {
   uint8_t blk[64];
   uint32_t H[8];
-  int blkLen, i;
+  unsigned int blkLen, i;
 
   H[0] = 0x6a09e667;
   H[1] = 0xbb67ae85;
@@ -159,7 +159,7 @@ void sha256(const uint8_t *msg, const int msgLen, uint8_t *hash) {
     sha256HashBlock(msg+i, H);
   }
   blkLen = msgLen - i;
-  memcpy(blk, msg + i, blkLen);
+  memcpy(blk, msg + i, (size_t)blkLen);
 
   /* pad the message */
   blk[blkLen++] = 0x80;
@@ -193,10 +193,10 @@ void sha256(const uint8_t *msg, const int msgLen, uint8_t *hash) {
 }
 
 /** Fast sha256 for msgLen < 56 */
-void sha256f(const uint8_t *msg, const int msgLen, uint8_t *hash) {
+void sha256f(const uint8_t *msg, const unsigned int msgLen, uint8_t *hash) {
   uint8_t blk[64];
   uint32_t H[8];
-  int blkLen, i;
+  unsigned int blkLen, i;
 
   H[0] = 0x6a09e667;
   H[1] = 0xbb67ae85;
@@ -208,7 +208,7 @@ void sha256f(const uint8_t *msg, const int msgLen, uint8_t *hash) {
   H[7] = 0x5be0cd19;
 
   blkLen = msgLen;
-  memcpy(blk, msg, blkLen);
+  memcpy(blk, msg, (size_t)blkLen);
 
   /* pad the message */
   blk[blkLen++] = 0x80;

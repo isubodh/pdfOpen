@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 Henning Norén
+ * Copyright (C) 2006-2022 Henning Norén
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ sha256_bench(void) {
   unsigned int nrprocessed = 0;
   clock_t startTime, endTime;
 
-  buf = calloc(COMMON_SHA256_SLOW_SIZE, sizeof(uint8_t));
+  buf = checked_calloc(COMMON_SHA256_SLOW_SIZE, sizeof(uint8_t));
 
   alarm(BENCHINTERVAL);
   startTime = clock();
@@ -101,7 +101,7 @@ md5_bench(void) {
   unsigned int nrprocessed = 0;
   clock_t startTime, endTime;
 
-  buf = calloc(COMMON_MD5_SIZE, sizeof(uint8_t));
+  buf = checked_calloc(COMMON_MD5_SIZE, sizeof(uint8_t));
 
   alarm(BENCHINTERVAL);
   startTime = clock();
@@ -121,7 +121,7 @@ md5_50_bench(void) {
   unsigned int nrprocessed = 0;
   clock_t startTime, endTime;
   
-  buf = calloc(16, sizeof(uint8_t));
+  buf = checked_calloc(16, sizeof(uint8_t));
   md5_50_init(16);
   alarm(BENCHINTERVAL);
   startTime = clock();
@@ -171,7 +171,7 @@ rc4_bench(void) {
   unsigned int nrprocessed = 0;
   clock_t startTime, endTime;
 
-  enckey = calloc(16, sizeof(uint8_t));
+  enckey = checked_calloc(16, sizeof(uint8_t));
 
   alarm(BENCHINTERVAL);
   startTime = clock();

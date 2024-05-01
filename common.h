@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2020 Henning Norén
+ * Copyright (C) 2006-2022 Henning Norén
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,12 @@ typedef enum passwordMethod {
   Wordlist=1,
   Generative
 } passwordMethod;
+
+void*
+checked_malloc(size_t size);
+
+void*
+checked_calloc(size_t nmemb, size_t size);
 
 void
 freeEncData(EncData *e);
